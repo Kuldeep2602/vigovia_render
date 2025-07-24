@@ -1,0 +1,714 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{destination}} Itinerary - {{userName}}</title>
+    <style>
+        :root {
+            --primary: #541C9C;
+            --primary-light: #936FE0;
+            --secondary: #680099;
+            --accent: #936FE0;
+            --dark: #321E5D;
+            --light: #FBF4FF;
+            --gradient-start: #541C9C;
+            --gradient-end: #680099;
+            --text-light: #ffffff;
+            --text-dark: #333333;
+            --text-muted: #666666;
+            --bg-light: #f5f5f5;
+            --bg-white: #ffffff;
+            --border-light: #e0e0e0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        
+        .header {
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: var(--text-light);
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .brand h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0;
+        }
+        
+        .brand p {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .trip-info {
+            text-align: right;
+        }
+        
+        .trip-info h2 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trip-info h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trip-info p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .trip-icons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .trip-icon {
+            font-size: 1.5rem;
+            padding: 0.5rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .card {
+            background: var(--bg-white);
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .summary-item label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .summary-item span {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        /* Daily Itinerary Styles */
+        .section-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .day-container {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .day-header {
+            margin-bottom: 1rem;
+        }
+
+        .day-date {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+
+        .day-description {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline-line {
+            position: relative;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--primary);
+            margin-left: 0.5rem;
+        }
+
+        .time-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .time-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .time-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .time-dot.purple {
+            background-color: var(--primary);
+        }
+
+        .time-period {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .activity-item {
+            margin-left: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .activity-time {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .activity-description {
+            color: #333;
+        }
+
+        .activity-note {
+            color: #666;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        thead {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        tr:nth-child(even) {
+            background-color: var(--bg-light);
+        }
+        
+        .flight-card {
+            background-color: var(--light);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        
+        .hotel-card {
+            background-color: #f4f8ff;
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+        }
+        
+        .terms-list {
+            list-style-type: none;
+            margin: 1rem 0;
+        }
+        
+        .terms-list li {
+            position: relative;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .terms-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+        }
+        
+        .footer {
+            background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .footer-contact {
+            text-align: right;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.25rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary);
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .notes-table th {
+            width: 30%;
+        }
+
+        .inclusion-item h4 {
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .inclusion-item p {
+            font-size: 0.875rem;
+        }
+
+        .inclusion-note {
+            color: var(--primary);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            font-weight: 600;
+        }
+
+        .service-item h4 {
+            margin-bottom: 0.25rem;
+        }
+
+        .service-item p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .flight-notes,
+        .hotel-notes {
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .flight-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .flight-airline {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .flight-route {
+            font-size: 0.75rem;
+        }
+
+        .generated-info {
+            font-size: 0.75rem;
+            text-align: right;
+            color: var(--text-muted);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: var(--light);
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--primary);
+        }
+
+        .payment-circle {
+            width: 2.5rem;
+            height: 2.5rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .payment-info {
+            flex: 1;
+        }
+
+        .payment-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+
+        .payment-amount {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="header-content">
+            <div class="brand">
+                <h1>vigovia</h1>
+                <p>PLAN.PACK.GO</p>
+            </div>
+            <div class="trip-info">
+                <h2>Hi, {{userName}}!</h2>
+                <h1>{{destination}} Itinerary</h1>
+                <p>{{numberOfDays}} Days {{numberOfNights}} Nights</p>
+                <div class="trip-icons">
+                    <span class="trip-icon">✈️</span>
+                    <span class="trip-icon">🏨</span>
+                    <span class="trip-icon">🚗</span>
+                    <span class="trip-icon">🍽️</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Trip Summary Card -->
+        <div class="card">
+            <h2>Trip Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <label>Departure From</label>
+                    <span>{{departureFrom}}</span>
+                </div>
+                <div class="summary-item">
+                    <label>Departure</label>
+                    <span>{{departureDate}}</span>
+                </div>
+                <div class="summary-item">
+                    <label>Arrival</label>
+                    <span>{{arrivalDate}}</span>
+                </div>
+                <div class="summary-item">
+                    <label>Destination</label>
+                    <span>{{destination}}</span>
+                </div>
+                <div class="summary-item">
+                    <label>No. Of Travellers</label>
+                    <span>{{numberOfTravelers}}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Daily Itinerary -->
+        {{#if activitiesByDay}}
+        <div class="card">
+            <h2 class="section-title">Daily Itinerary</h2>
+            
+            {{#each activitiesByDay}}
+            <div class="day-container">
+                <div class="day-header">
+                    <h3 class="day-date">Day {{dayNumber}} - {{formattedDate}}</h3>
+                    <p class="day-description">{{../destination}} City Experience</p>
+                </div>
+                
+                <div class="timeline-container">
+                    <div class="timeline-line">
+                        {{#if Morning}}
+                        <div class="time-section">
+                            <div class="time-label">
+                                <div class="time-dot purple"></div>
+                                <span class="time-period">Morning</span>
+                            </div>
+                            {{#each Morning}}
+                            <div class="activity-item">
+                                <span class="activity-time">10:56</span> - 
+                                <span class="activity-description">{{activityName}}</span>
+                                {{#if description}}
+                                <div class="activity-note">{{description}}</div>
+                                {{/if}}
+                            </div>
+                            {{/each}}
+                        </div>
+                        {{/if}}
+
+                        {{#if Afternoon}}
+                        <div class="time-section">
+                            <div class="time-label">
+                                <div class="time-dot purple"></div>
+                                <span class="time-period">Afternoon</span>
+                            </div>
+                            {{#each Afternoon}}
+                            <div class="activity-item">
+                                <span class="activity-time">14:30</span> - 
+                                <span class="activity-description">{{activityName}}</span>
+                                {{#if description}}
+                                <div class="activity-note">{{description}}</div>
+                                {{/if}}
+                            </div>
+                            {{/each}}
+                        </div>
+                        {{/if}}
+
+                        {{#if Evening}}
+                        <div class="time-section">
+                            <div class="time-label">
+                                <div class="time-dot purple"></div>
+                                <span class="time-period">Evening</span>
+                            </div>
+                            {{#each Evening}}
+                            <div class="activity-item">
+                                <span class="activity-time">18:00</span> - 
+                                <span class="activity-description">{{activityName}}</span>
+                                {{#if description}}
+                                <div class="activity-note">{{description}}</div>
+                                {{/if}}
+                            </div>
+                            {{/each}}
+                        </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+
+        <!-- Flight Summary -->
+        {{#if flights}}
+        <div class="card">
+            <h2>Flight Summary</h2>
+            {{#each flights}}
+            <div class="flight-card">
+                <div class="flight-date">{{formattedDate}}</div>
+                <div class="flight-airline"><strong>{{airline}}</strong> {{#if flightNumber}}{{flightNumber}}{{/if}}</div>
+                <div class="flight-route">{{route}}</div>
+            </div>
+            {{/each}}
+            <div class="flight-notes">
+                <small>Note: All Flights Include Meals, Seat Choice (including XL), and 20kg+7kg Checked+ Baggage</small>
+            </div>
+        </div>
+        {{/if}}
+
+        <!-- Hotel Bookings -->
+        {{#if hotels}}
+        <div class="card">
+            <h2>Hotel Bookings</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Nights</th>
+                        <th>Hotel Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each hotels}}
+                    <tr>
+                        <td>{{city}}</td>
+                        <td>{{checkInFormatted}}</td>
+                        <td>{{checkOutFormatted}}</td>
+                        <td>{{nights}}</td>
+                        <td>{{hotelName}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+            <div class="hotel-notes">
+                <ol style="margin-left: 1.5rem; margin-top: 1rem; font-size: 0.8rem;">
+                    <li>All Hotels Are Transfers And Can Be Replaced With Similar.</li>
+                    <li>Breakfast Included For All Hotel Stays.</li>
+                    <li>All Hotels Are 3* And Above Category.</li>
+                    <li>A maximum occupancy of 2 people/room is allowed in most hotels.</li>
+                </ol>
+            </div>
+        </div>
+        {{/if}}
+
+        <!-- Terms and Conditions -->
+        <div class="card">
+            <h2>Terms and Conditions</h2>
+            <ul class="terms-list">
+                <li>All prices are subject to availability and may change without prior notice.</li>
+                <li>Bookings are subject to the terms and conditions of the respective service providers.</li>
+            </ul>
+            <div class="text-center">
+                <a href="#" class="btn-primary">View all terms and conditions</a>
+            </div>
+        </div>
+
+        <!-- Payment Plan -->
+        {{#if totalAmount}}
+        {{#if (gt totalAmount 0)}}
+        <div class="card">
+            <h2>Payment Plan</h2>
+            <div class="summary-grid" style="margin-bottom: 1.5rem;">
+                <div class="summary-item">
+                    <label>Total Amount</label>
+                    <span>₹ {{formatCurrency totalAmount}} For {{numberOfTravelers}} Pax (Inclusive Of GST)</span>
+                </div>
+                <div class="summary-item">
+                    <label>TCS</label>
+                    <span>Not Calculated</span>
+                </div>
+            </div>
+
+            {{#if installments}}
+            {{#if installments.length}}
+            <div class="timeline-container">
+                {{#each installments}}
+                <div class="payment-item">
+                    <div class="payment-circle">{{installmentNumber}}</div>
+                    <div class="payment-info">
+                        <div class="payment-date">Due: {{dueDate}}</div>
+                        <div class="payment-amount">₹{{amount}}</div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+            {{/if}}
+        </div>
+        {{/if}}
+        {{/if}}
+        
+        <!-- Scope of Service -->
+        <div class="card">
+            <h2>Scope Of Service</h2>
+            <div class="summary-grid">
+                <div class="service-item">
+                    <h4>Flight Tickets And Hotel Vouchers</h4>
+                    <p>Delivered 3 Days Post Full Payment</p>
+                </div>
+                <div class="service-item">
+                    <h4>Web Check-in</h4>
+                    <p>Boarding Pass Delivery Via Email/WhatsApp</p>
+                </div>
+                <div class="service-item">
+                    <h4>Support</h4>
+                    <p>Chat Support - Response Time: 4 Hours</p>
+                </div>
+                <div class="service-item">
+                    <h4>Cancellation Support</h4>
+                    <p>Provided</p>
+                </div>
+                <div class="service-item">
+                    <h4>Trip Support</h4>
+                    <p>Response Time: 5 Minutes</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inclusion Summary -->
+        <div class="card">
+            <h2>Inclusion Summary</h2>
+            <div class="summary-grid">
+                <div class="inclusion-item">
+                    <h4>Flight (2)</h4>
+                    <p>All Flight Included</p>
+                    <p class="inclusion-note">Including CashCoupons</p>
+                </div>
+                <div class="inclusion-item">
+                    <h4>Accommodation (1)</h4>
+                    <p>Total {{numberOfNights}} Nights</p>
+                    <p class="inclusion-note">As Per Requirement</p>
+                </div>
+                <div class="inclusion-item">
+                    <h4>Hotel Transfer (1)</h4>
+                    <p>Airport Taxi Hotel Transportation</p>
+                    <p class="inclusion-note">Included</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>vigovia</h3>
+                <p>PLAN.PACK.GO</p>
+            </div>
+            <div class="footer-contact">
+                <p><strong>Vigovia Tech Pvt. Ltd.</strong></p>
+                <p>Registered Office: HB-109 Giridhar Hills, Laxmi Business Park, Khargarhar, India</p>
+                <p>Phone: +91 9999999999</p>
+                <p>Email: Contact@Vigovia.Com</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

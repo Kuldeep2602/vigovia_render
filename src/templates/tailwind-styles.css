@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  /* Utility components for common patterns */
+  .gradient-bg {
+    background: linear-gradient(135deg, #5419C9 0%, #667eea 100%);
+  }
+  
+  .btn-primary {
+    @apply bg-vigovia-primary text-white px-6 py-3 rounded-lg hover:bg-vigovia-secondary transition-colors font-medium;
+  }
+  
+  .btn-secondary {
+    @apply bg-vigovia-accent text-white px-4 py-2 rounded-md hover:bg-vigovia-secondary transition-colors;
+  }
+}
+
+/* PDF-specific print styles */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+  
+  .bg-gradient-to-l,
+  .bg-gradient-to-r,
+  .gradient-bg {
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5419C9;
+}

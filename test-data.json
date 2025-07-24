@@ -1,0 +1,91 @@
+{
+  "userDetails": {
+    "name": "John Smith",
+    "email": "john.smith@example.com",
+    "phone": "+1234567890",
+    "numberOfTravelers": 2
+  },
+  "tripDetails": {
+    "destination": "Paris, France",
+    "departureFrom": "New York, USA",
+    "departureDate": "2024-07-01",
+    "arrivalDate": "2024-07-07",
+    "numberOfDays": 7,
+    "numberOfNights": 6,
+    "tripType": "leisure"
+  },
+  "activities": [
+    {
+      "activityId": "act1",
+      "activityName": "Visit Eiffel Tower",
+      "description": "Iconic tower visit with stunning city views",
+      "day": 1,
+      "timeSlot": "Morning",
+      "price": 25,
+      "duration": "2 hours",
+      "notes": "Book tickets in advance"
+    },
+    {
+      "activityId": "act2",
+      "activityName": "Louvre Museum Tour",
+      "description": "World's largest art museum",
+      "day": 2,
+      "timeSlot": "Afternoon",
+      "price": 15,
+      "duration": "3 hours",
+      "notes": "Audio guide recommended"
+    }
+  ],
+  "flights": [
+    {
+      "date": "2024-07-01",
+      "airline": "Air France",
+      "route": "JFK → CDG",
+      "flightNumber": "AF007",
+      "departureTime": "10:30",
+      "arrivalTime": "23:45",
+      "class": "Economy"
+    }
+  ],
+  "hotels": [
+    {
+      "city": "Paris",
+      "checkIn": "2024-07-01",
+      "checkOut": "2024-07-07",
+      "nights": 6,
+      "hotelName": "Hotel de Paris",
+      "address": "123 Champs-Élysées, Paris",
+      "roomType": "Deluxe Double",
+      "rating": 4
+    }
+  ],
+  "additionalServices": {
+    "scopeOfServices": ["Hotel Bookings", "Activity Planning", "Transportation"],
+    "specialNotes": "This is a premium travel package with personalized services.",
+    "termsAndConditions": "Standard terms and conditions apply. Cancellation policy: Free cancellation up to 48 hours before departure.",
+    "paymentPlan": {
+      "totalAmount": 2500,
+      "currency": "USD",
+      "installments": [
+        {
+          "installmentNumber": 1,
+          "amount": 500,
+          "dueDate": "2024-06-15",
+          "description": "Advance payment"
+        },
+        {
+          "installmentNumber": 2,
+          "amount": 2000,
+          "dueDate": "2024-06-30",
+          "description": "Final payment"
+        }
+      ]
+    },
+    "visa": {
+      "required": true,
+      "type": "Tourist Visa",
+      "validity": "90 days",
+      "processingDate": "2024-06-01"
+    }
+  }
+}
