@@ -27,7 +27,9 @@ COPY . .
 RUN mkdir -p generated-pdfs temp
 
 # Set Puppeteer to use installed Chromium
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
 
 # Create non-root user for security
 RUN addgroup -g 1001 -S nodejs
