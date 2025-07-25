@@ -228,39 +228,18 @@ export class PDFGeneratorService {
 
   // NEW METHOD - Get Puppeteer options for Docker environment
   getPuppeteerOptions() {
-    const isProduction = process.env.NODE_ENV === 'production';
-    
-    const options = {
-      headless: true, // Changed from 'new' to true for better compatibility
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-gpu',
-        '--disable-web-security',
-        '--disable-features=VizDisplayCompositor',
-        '--no-first-run',
-        '--no-zygote',
-        '--single-process',
-        '--disable-extensions',
-        '--disable-background-timer-throttling',
-        '--disable-backgrounding-occluded-windows',
-        '--disable-renderer-backgrounding',
-        '--disable-field-trial-config',
-        '--disable-ipc-flooding-protection'
-      ],
-      timeout: 60000, // 60 second timeout
-      dumpio: false,
-      pipe: true
-    };
-
-    // Set executable path for production (Docker)
-    if (isProduction && process.env.PUPPETEER_EXECUTABLE_PATH) {
-      options.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-    }
-
-    return options;
-  }
+  return {
+    headless: true,
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--single-process',
+      '--disable-dev-shm-usage'
+    ],
+    timeout: 0 // No timeout
+  };
+}
 
   async generateItineraryPDF(data, outputPath) {
     let browser; // CHANGED - Added variable declaration for better cleanup
